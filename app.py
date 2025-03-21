@@ -93,20 +93,31 @@ def ask_question():
     with open("chunks.pkl", "rb") as f:
         chunks = pickle.load(f)
 
-    D, I = index.search(query_embedding, k=10)
+    D, I = index.search(query_embedding, k=1)
     context = " ".join([chunks[i] for i in I[0]])
-    print(context)
-    prompt = f"""You are a helpful AI assistant. Read the context below and answer the question in a **clear and concise human-like way**.
+    prompt = f"""
+You are a helpful AI assistant answering user questions based ONLY on the provided context.
 
-Only use the information from the context. Avoid listing facts unless the question asks for it.
+Guidelines:
+- ONLY use information found in the context.
+- If the answer is NOT present in the context, reply: "I’m not sure based on the given information."
+- Do NOT make assumptions or add extra knowledge.
+- Do NOT list facts unless the question specifically asks for them.
+- Your goal is to directly answer what is asked, no more, no less.
+- You have to give the response as if you're talking like a human to another human.
+- Keep your response short and simple.
+- If the answer is just one word, reply with that one word only.
 
 Context:
 {context}
 
-Question: {query}
+Question:
+{query}
 
 Answer:
 """
+
+
 
 
     headers = {
@@ -127,8 +138,18 @@ Answer:
     result = response.json()
 
     answer = result.get("choices", [{}])[0].get("text", "Sorry, I couldn't find an answer.")
+    cleaned = answer.strip()
 
-    return jsonify({'answer': answer.strip()})
+# Remove "Question:" and "Answer:" if the model includes them
+    if "Answer:" in cleaned:
+        cleaned = cleaned.split("Answer:")[-1].strip()
+
+    # Split into lines and make bullets
+    lines = cleaned.split('\n')
+    bulleted = "\n".join(f"- {line.strip()}" for line in lines if line.strip())
+
+    return jsonify({'answer': bulleted})
+
 
 if __name__ == '__main__':
-    app.run(debug=False ,port=5000)
+    app.run(host="0.0.0.0", port=5000,debug=False)
