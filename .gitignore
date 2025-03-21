@@ -1,0 +1,24 @@
+# Ignore Python virtual environment
+myenv/
+
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignore environment variables
+.env
+
+# Ignore VSCode settings (optional)
+.vscode/
+
+# Ignore logs
+*.log
+
+# Ignore Flask cache files
+instance/
+*.db
+*.sqlite3
+
+# Ignore macOS hidden files (if any)
+.DS_Store

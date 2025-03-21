@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intellex - Advanced Document Intelligence</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --bone-white: #f9f6f0;
+      --off-white: #f4f1ea;
+      --light-gray: #e0e0e0;
+      --medium-gray: #767676;
+      --dark-gray: #333333;
+      --black: #000000;
+      --blue-accent: #0043ce;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: var(--bone-white);
+      color: var(--dark-gray);
+      line-height: 1.6;
+      margin: 0;
+      padding: 30px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      width: 100%;
+      margin: auto;
+      padding: 40px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
+    
+    .logo-icon {
+      font-size: 24px;
+      color: var(--blue-accent);
+      margin-right: 10px;
+    }
+    
+    h1 {
+      font-weight: 600;
+      font-size: 24px;
+      color: var(--black);
+      margin: 0;
+    }
+    
+    h2 {
+      font-weight: 500;
+      font-size: 18px;
+      color: var(--medium-gray);
+      margin: 0 0 30px 0;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--dark-gray);
+    }
+    
+    .file-input-container {
+      position: relative;
+      border: 2px dashed var(--light-gray);
+      border-radius: 6px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .file-input-container:hover {
+      border-color: var(--medium-gray);
+    }
+    
+    .file-input-container input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .file-input-icon {
+      font-size: 40px;
+      color: var(--medium-gray);
+      margin-bottom: 15px;
+    }
+    
+    .file-input-text {
+      color: var(--medium-gray);
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid var(--light-gray);
+      border-radius: 6px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      resize: none;
+      transition: border 0.3s ease;
+    }
+    
+    textarea:focus {
+      border-color: var(--blue-accent);
+      outline: none;
+    }
+    
+    button {
+      background-color: var(--black);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 15px 25px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    
+    button:hover {
+      background-color: #222;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--blue-accent);
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 15px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      font-size: 16px;
+      color: var(--medium-gray);
+    }
+    
+    .answer-container {
+      display: none;
+      margin-top: 30px;
+      padding: 25px;
+      background-color: var(--off-white);
+      border-radius: 6px;
+      border-left: 4px solid var(--blue-accent);
+    }
+    
+    .answer-title {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: var(--black);
+    }
+    
+    .answer-icon {
+      margin-right: 10px;
+      color: var(--blue-accent);
+    }
+    
+    .answer-content {
+      line-height: 1.8;
+    }
+    
+    .file-name {
+      font-weight: 500;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <i class="fas fa-brain logo-icon"></i>
+      </div>
+      <div>
+        <h1>Intellex</h1>
+        <h2>Advanced Document Intelligence</h2>
+      </div>
+    </div>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>Upload document for analysis:</label>
+        <div class="file-input-container" id="dropArea">
+          <i class="fas fa-file-pdf file-input-icon"></i>
+          <p class="file-input-text">Drag & drop your PDF here or click to browse</p>
+          <p class="file-name" id="fileName"></p>
+          <input type="file" name="pdf" accept=".pdf" required id="fileInput">
+        </div>
+      </div>
+      <button type="submit">Process Document</button>
+    </form>
+
+    <div class="loading" id="uploadLoading">
+      <div class="spinner"></div>
+      <p class="loading-text">Creating intelligent vector database...</p>
+    </div>
+
+    <form id="questionForm" style="display:none;">
+      <div class="form-group">
+        <label>Ask a question about your document:</label>
+        <textarea name="question" rows="3" required placeholder="What would you like to know about this document?"></textarea>
+      </div>
+      <button type="submit">Submit Query</button>
+    </form>
+
+    <div class="loading" id="queryLoading">
+      <div class="spinner"></div>
+      <p class="loading-text">Analyzing document context...</p>
+    </div>
+
+    <div class="answer-container" id="answer">
+      <div class="answer-title">
+        <i class="fas fa-lightbulb answer-icon"></i>
+        <span>Intellex Analysis</span>
+      </div>
+      <div class="answer-content" id="answerContent"></div>
+    </div>
+  </div>
+
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    const questionForm = document.getElementById('questionForm');
+    const uploadLoading = document.getElementById('uploadLoading');
+    const queryLoading = document.getElementById('queryLoading');
+    const answerContainer = document.getElementById('answer');
+    const answerContent = document.getElementById('answerContent');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const dropArea = document.getElementById('dropArea');
+    
+    // File upload preview
+    fileInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        fileName.textContent = this.files[0].name;
+        fileName.style.display = 'block';
+      }
+    });
+    
+    // Drag and drop functionality
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+      dropArea.classList.add('pulse');
+    }
+    
+    function unhighlight() {
+      dropArea.classList.remove('pulse');
+    }
+    
+    dropArea.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      fileInput.files = files;
+      
+      if (files && files[0]) {
+        fileName.textContent = files[0].name;
+        fileName.style.display = 'block';
+      }
+    }
+    
+    // Form handling
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      uploadLoading.style.display = 'block';
+      const formData = new FormData(uploadForm);
+      
+      try {
+        await fetch('/upload', { method: 'POST', body: formData });
+        uploadLoading.style.display = 'none';
+        questionForm.style.display = 'block';
+        questionForm.classList.add('fade-in');
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        uploadLoading.style.display = 'none';
+        alert('There was an error processing your document. Please try again.');
+      }
+    });
+
+    questionForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      queryLoading.style.display = 'block';
+      answerContainer.style.display = 'none';
+      
+      const question = new FormData(questionForm).get('question');
+      
+      try {
+        const res = await fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+        
+        const data = await res.json();
+        answerContent.innerHTML = data.answer;
+        
+        queryLoading.style.display = 'none';
+        answerContainer.style.display = 'block';
+        answerContainer.classList.add('fade-in');
+      } catch (error) {
+        console.error('Error getting answer:', error);
+        queryLoading.style.display = 'none';
+        alert('There was an error processing your query. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
